@@ -1,59 +1,53 @@
 #!/bin/bash
 
-echo "============================================"
-echo "Starting Laravel Application (Railway)"
-echo "============================================"
+echo "🚀 Starting Container"
 echo ""
 
-# ----------------------------------------------------
-# 1. Run Migrations
-# ----------------------------------------------------
+# --------------------------
+# 1. Run migrations
+# --------------------------
 echo "Running migrations..."
 php artisan migrate --force
 
-# ----------------------------------------------------
-# 2. Seed database if needed
-# ----------------------------------------------------
-echo "Checking and seeding database..."
-php check-and-seed.php
+# Seed database
+php check-and-seed.php || true
 
-# ----------------------------------------------------
-# 3. Remove hot file (forces production mode)
-# ----------------------------------------------------
-echo "Ensuring no Vite dev server (removing public/hot)..."
+# --------------------------
+# 2. Ensure Vite manifest exists
+# --------------------------
+echo ""
+echo "🔎 Checking manifest file..."
+
+# Path Railway Vite puts it
+VITE_PATH="public/build/.vite/manifest.json"
+# Path Laravel expects it
+FINAL_PATH="public/build/manifest.json"
+
+# Remove Vite dev server file
 rm -f public/hot
 
-# ----------------------------------------------------
-# 4. Ensure Vite manifest exists in correct location
-# ----------------------------------------------------
-echo ""
-echo "Checking Vite manifest file..."
-
-# Case 1: Vite 5 puts it here:
-if [ -f "public/build/.vite/manifest.json" ]; then
-    echo "✓ Found manifest in .vite folder"
-    cp public/build/.vite/manifest.json public/build/manifest.json
-    echo "✓ Copied manifest to public/build/manifest.json"
-fi
-
-# Case 2: Vite already created it correctly:
-if [ -f "public/build/manifest.json" ]; then
-    echo "✓ Manifest ready at public/build/manifest.json"
+# If Vite wrote to .vite folder, copy to expected folder
+if [ -f "$VITE_PATH" ]; then
+    echo "✓ Found Vite manifest at .vite folder"
+    echo "📄 Copying to public/build/manifest.json..."
+    cp "$VITE_PATH" "$FINAL_PATH"
 else
-    echo "⚠ ERROR: No manifest.json found after build!"
-    echo "   CSS/JS will not load."
+    echo "⚠ No manifest found in .vite. Listing public/build directory:"
+    ls -R public/build/
 fi
 
-# ----------------------------------------------------
-# 5. Display what files exist
-# ----------------------------------------------------
-echo ""
-echo "Listing build directory:"
-ls -R public/build/
+# Confirm the final manifest exists before starting Laravel
+if [ ! -f "$FINAL_PATH" ]; then
+    echo "❌ Manifest STILL missing. Laravel will fail."
+    echo "Stopping container."
+    exit 1
+fi
 
-# ----------------------------------------------------
-# 6. Start Laravel server
-# ----------------------------------------------------
+echo "✓ Manifest ready"
 echo ""
-echo "Starting Laravel server..."
-php artisan serve --host=0.0.0.0 --port=${PORT:-8000}
+
+# --------------------------
+# 3. Start Laravel
+# --------------------------
+echo "Starting Laravel..."
+php artisan serve --host=0.0.0.0 --port=$PORT
