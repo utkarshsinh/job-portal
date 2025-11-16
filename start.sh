@@ -11,14 +11,12 @@ php check-and-seed.php || true
 rm -f public/hot
 
 # Confirm manifest exists at the correct Laravel Vite location
-if [ -f "public/build/.vite/manifest.json" ]; then
-    echo "✓ Manifest found at public/build/.vite/manifest.json"
+if [ -f "public/build/manifest.json" ]; then
+    echo "✓ Manifest found at public/build/manifest.json"
 else
-    echo "✗ Manifest missing! Build did not output manifest.json at public/build/.vite/manifest.json"
+    echo "✗ Manifest missing! Build did not output manifest.json at public/build/manifest.json"
     echo "Checking public/build/ directory:"
     ls -la public/build/ || echo "public/build/ does not exist"
-    echo "Checking public/build/.vite/ directory:"
-    ls -la public/build/.vite/ 2>/dev/null || echo "public/build/.vite/ does not exist"
     exit 1
 fi
 
