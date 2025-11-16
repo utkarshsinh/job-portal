@@ -7,13 +7,6 @@ php artisan migrate --force || true
 
 php check-and-seed.php || true
 
-# ---- NEW IMPORTANT LINES ----
-echo "Installing Node dependencies..."
-npm ci --omit=dev || npm install --production=false
-
-echo "Building frontend assets with Vite..."
-npm run build
-# ------------------------------
 
 # Remove Vite dev server flag
 rm -f public/hot
