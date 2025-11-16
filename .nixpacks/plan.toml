@@ -1,0 +1,19 @@
+[phases.setup]
+nixPkgs = ["php82", "php82Packages.composer", "nodejs_18"]
+
+[phases.install]
+cmds = [
+  "composer install --no-dev --optimize-autoloader",
+  "npm ci --include=dev"
+]
+
+[phases.build]
+cmds = [
+  "mkdir -p public/build",
+  "npm run build",
+  "if [ -f public/build/.vite/manifest.json ]; then cp public/build/.vite/manifest.json public/build/manifest.json; echo 'Copied manifest.json to public/build/'; fi"
+]
+
+[phases.start]
+cmd = "chmod +x start.sh && ./start.sh"
+

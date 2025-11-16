@@ -13,6 +13,8 @@ export default defineConfig({
     build: {
         manifest: true,
         outDir: 'public/build',
+        assetsDir: 'assets',
+        copyPublicDir: false,
         emptyOutDir: true,
         rollupOptions: {
             output: {
