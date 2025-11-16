@@ -4,7 +4,7 @@ nixPkgs = ["php82", "php82Packages.composer", "nodejs_18"]
 [phases.install]
 cmds = [
   "composer install --no-dev --optimize-autoloader",
-  "npm ci"
+  "npm ci --include=dev"
 ]
 
 [phases.build]
@@ -13,10 +13,10 @@ cmds = [
   "echo 'Building assets with Vite...'",
   "npm run build || (echo 'Build failed!' && exit 1)",
   "echo 'Verifying build output...'",
-  "test -f public/build/.vite/manifest.json || (echo 'Manifest file missing at public/build/.vite/manifest.json!' && ls -la public/build/ && exit 1)",
-  "ls -la public/build/assets/ || (echo 'No assets directory found' && ls -la public/build/ && exit 1)",
-  "echo '✓ Manifest file found'",
-  "echo '✓ Assets directory found'",
+  "test -f public/build/manifest.json || (echo 'Manifest file missing at public/build/manifest.json!' && ls -la public/build/ && exit 1)",
+  "grep -q 'resources/css/app.css' public/build/manifest.json || (echo 'CSS manifest entry missing' && cat public/build/manifest.json && exit 1)",
+  "ls -la public/build/assets/*.css || (echo 'No CSS assets found' && ls -la public/build/assets/ && exit 1)",
+  "ls -la public/build/assets/*.js || (echo 'No JS assets found' && ls -la public/build/assets/ && exit 1)",
   "echo 'Build completed successfully!'"
 ]
 
