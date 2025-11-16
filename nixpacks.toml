@@ -4,12 +4,15 @@ nixPkgs = ["php82", "php82Packages.composer", "nodejs_18"]
 [phases.install]
 cmds = [
   "composer install --no-dev --optimize-autoloader",
-  "npm ci",
-  "npm run build"
+  "npm ci"
 ]
 
 [phases.build]
-cmds = []
+cmds = [
+  "mkdir -p public/build",
+  "npm run build",
+  "ls -la public/build || echo 'Build directory check'"
+]
 
 [start]
 cmd = "chmod +x start.sh && ./start.sh"
