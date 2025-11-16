@@ -6,22 +6,6 @@ export default defineConfig({
         laravel({
             input: ['resources/css/app.css', 'resources/js/app.js'],
             refresh: true,
-            publicDirectory: 'public',
-            buildDirectory: 'build',
         }),
     ],
-    build: {
-        manifest: true,
-        outDir: 'public/build',
-        assetsDir: 'assets',
-        emptyOutDir: true,
-        copyPublicDir: false,
-        rollupOptions: {
-            output: {
-                entryFileNames: 'assets/[name]-[hash].js',
-                chunkFileNames: 'assets/[name]-[hash].js',
-                assetFileNames: 'assets/[name]-[hash].[ext]',
-            },
-        },
-    },
 });

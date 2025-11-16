@@ -10,12 +10,15 @@ php check-and-seed.php || true
 # Remove Vite dev server flag
 rm -f public/hot
 
-# Confirm manifest exists
-if [ -f "public/build/manifest.json" ]; then
-    echo "✓ Manifest found"
+# Confirm manifest exists at the correct Laravel Vite location
+if [ -f "public/build/.vite/manifest.json" ]; then
+    echo "✓ Manifest found at public/build/.vite/manifest.json"
 else
-    echo "✗ Manifest missing! Build did not output manifest.json"
-    ls -la public/build/
+    echo "✗ Manifest missing! Build did not output manifest.json at public/build/.vite/manifest.json"
+    echo "Checking public/build/ directory:"
+    ls -la public/build/ || echo "public/build/ does not exist"
+    echo "Checking public/build/.vite/ directory:"
+    ls -la public/build/.vite/ 2>/dev/null || echo "public/build/.vite/ does not exist"
     exit 1
 fi
 
