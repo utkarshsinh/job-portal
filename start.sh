@@ -3,31 +3,25 @@
 echo "Starting Container"
 echo ""
 
-# Run migrations
 echo "Running migrations..."
 php artisan migrate --force
 
-# Seed database automatically if tables are empty
 php check-and-seed.php
 
-# Ensure production uses built assets (not Vite dev server)
+# Prevent Vite dev server loading
 rm -f public/hot
 
-echo "Checking manifest file location..."
-# Vite v5 may emit manifest under .vite; copy to expected root if needed
-if [ -f "public/build/.vite/manifest.json" ]; then
-  echo "✓ Found Vite manifest (.vite folder)"
-  cp public/build/.vite/manifest.json public/build/manifest.json
-  echo "✓ Copied manifest to expected location"
+# FIX: Make sure manifest is in correct location
+echo "Checking Vite manifest..."
+if [ -f "public/build/manifest.json" ]; then
+    echo "✓ Manifest already in correct location"
+elif [ -f "public/build/.vite/manifest.json" ]; then
+    echo "✓ Found Vite manifest under .vite"
+    cp public/build/.vite/manifest.json public/build/manifest.json
+    echo "✓ Copied manifest to public/build/manifest.json"
 else
-  if [ -f "public/build/manifest.json" ]; then
-    echo "✓ Found Vite manifest at expected location"
-  else
-    echo "✗ manifest.json NOT found in public/build"
-    ls -la public/build || true
-  fi
+    echo "✗ Manifest NOT FOUND"
 fi
 
-# Start the server
-echo ""
+echo "Starting Laravel..."
 php artisan serve --host=0.0.0.0 --port=$PORT
