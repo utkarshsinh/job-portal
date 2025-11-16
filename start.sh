@@ -7,10 +7,18 @@ php artisan migrate --force || true
 
 php check-and-seed.php || true
 
+# ---- NEW IMPORTANT LINES ----
+echo "Installing Node dependencies..."
+npm ci --omit=dev || npm install --production=false
+
+echo "Building frontend assets with Vite..."
+npm run build
+# ------------------------------
+
 # Remove Vite dev server flag
 rm -f public/hot
 
-# Confirm manifest exists (Laravel Vite plugin creates it at .vite/manifest.json)
+# Confirm manifest exists
 if [ -f "public/build/.vite/manifest.json" ]; then
     echo "✓ Manifest found at public/build/.vite/manifest.json"
 elif [ -f "public/build/manifest.json" ]; then
