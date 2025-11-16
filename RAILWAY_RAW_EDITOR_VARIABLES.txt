@@ -1,0 +1,17 @@
+APP_NAME=Job Portal
+APP_ENV=production
+APP_DEBUG=true
+APP_URL=https://web-production-cab50.up.railway.app
+APP_KEY=base64:DzYP89fF1RKsEpZS+6WMKU9YHMP7CdrC8/NEqoHdZxA=
+LOG_CHANNEL=stderr
+DB_CONNECTION=mysql
+DB_HOST=mysql.railway.internal
+DB_PORT=3306
+DB_DATABASE=railway
+DB_USERNAME=root
+DB_PASSWORD=nnNsEbvqMoOouNUqJDnbbToULeLbQBJi
+SESSION_DRIVER=database
+SESSION_LIFETIME=120
+CACHE_DRIVER=file
+QUEUE_CONNECTION=sync
+
