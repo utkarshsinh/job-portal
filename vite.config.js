@@ -14,13 +14,13 @@ export default defineConfig({
         manifest: true,
         outDir: 'public/build',
         assetsDir: 'assets',
-        copyPublicDir: false,
         emptyOutDir: true,
+        copyPublicDir: false,
         rollupOptions: {
             output: {
-                entryFileNames: `assets/[name]-[hash].js`,
-                chunkFileNames: `assets/[name]-[hash].js`,
-                assetFileNames: `assets/[name]-[hash].[ext]`,
+                entryFileNames: 'assets/[name]-[hash].js',
+                chunkFileNames: 'assets/[name]-[hash].js',
+                assetFileNames: 'assets/[name]-[hash].[ext]',
             },
         },
     },
