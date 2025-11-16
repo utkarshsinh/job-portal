@@ -13,8 +13,9 @@ cmds = [
   "echo 'Building assets with Vite...'",
   "npm run build || (echo 'Build failed!' && exit 1)",
   "echo 'Verifying build output...'",
-  "test -f public/build/manifest.json || (echo 'Manifest file missing at public/build/manifest.json!' && ls -la public/build/ && exit 1)",
-  "grep -q 'resources/css/app.css' public/build/manifest.json || (echo 'CSS manifest entry missing' && cat public/build/manifest.json && exit 1)",
+  "test -f public/build/.vite/manifest.json && echo '✓ Manifest found at public/build/.vite/manifest.json' || (test -f public/build/manifest.json && echo '✓ Manifest found at public/build/manifest.json (fallback)' || (echo '✗ Manifest file missing!' && ls -la public/build/ && ls -la public/build/.vite/ 2>/dev/null || echo 'No .vite directory' && exit 1))",
+  "MANIFEST_FILE=$(test -f public/build/.vite/manifest.json && echo 'public/build/.vite/manifest.json' || echo 'public/build/manifest.json')",
+  "grep -q 'resources/css/app.css' $MANIFEST_FILE || (echo 'CSS manifest entry missing' && cat $MANIFEST_FILE && exit 1)",
   "ls -la public/build/assets/*.css || (echo 'No CSS assets found' && ls -la public/build/assets/ && exit 1)",
   "ls -la public/build/assets/*.js || (echo 'No JS assets found' && ls -la public/build/assets/ && exit 1)",
   "echo 'Build completed successfully!'"
