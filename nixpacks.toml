@@ -13,8 +13,10 @@ cmds = [
   "echo 'Building assets with Vite...'",
   "npm run build || (echo 'Build failed!' && exit 1)",
   "echo 'Verifying build output...'",
-  "test -f public/build/manifest.json || (echo 'Manifest file missing!' && exit 1)",
-  "ls -la public/build/assets/ || (echo 'No assets directory found' && exit 1)",
+  "test -f public/build/.vite/manifest.json || (echo 'Manifest file missing at public/build/.vite/manifest.json!' && ls -la public/build/ && exit 1)",
+  "ls -la public/build/assets/ || (echo 'No assets directory found' && ls -la public/build/ && exit 1)",
+  "echo '✓ Manifest file found'",
+  "echo '✓ Assets directory found'",
   "echo 'Build completed successfully!'"
 ]
 
