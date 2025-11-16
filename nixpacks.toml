@@ -13,6 +13,8 @@ cmds = [
   "echo 'Building assets with Vite...'",
   "npm run build || (echo 'Build failed!' && exit 1)",
   "echo 'Verifying build output...'",
+  "# If Vite wrote manifest under .vite/, copy it to expected location",
+  "if [ -f public/build/.vite/manifest.json ] && [ ! -f public/build/manifest.json ]; then echo 'Copying manifest from .vite to public/build/'; cp public/build/.vite/manifest.json public/build/manifest.json; fi",
   "test -f public/build/manifest.json || (echo 'Manifest file missing at public/build/manifest.json!' && ls -la public/build/ && exit 1)",
   "grep -q 'resources/css/app.css' public/build/manifest.json || (echo 'CSS manifest entry missing' && cat public/build/manifest.json && exit 1)",
   "ls -la public/build/assets/*.css || (echo 'No CSS assets found' && ls -la public/build/assets/ && exit 1)",
