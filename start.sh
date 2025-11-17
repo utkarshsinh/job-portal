@@ -4,24 +4,16 @@ echo "Starting container..."
 echo ""
 
 php artisan migrate --force || true
-
 php check-and-seed.php || true
 
-
-# Remove Vite dev server flag
 rm -f public/hot
 
-# Confirm manifest exists
-if [ -f "public/build/.vite/manifest.json" ]; then
-    echo "✓ Manifest found at public/build/.vite/manifest.json"
-elif [ -f "public/build/manifest.json" ]; then
-    echo "✓ Manifest found at public/build/manifest.json (fallback location)"
+# Only look for correct manifest
+if [ -f "public/build/manifest.json" ]; then
+    echo "✓ Manifest found at public/build/manifest.json"
 else
-    echo "✗ Manifest missing! Build did not output manifest.json"
-    echo "Checking public/build/ directory:"
-    ls -la public/build/ || echo "public/build/ does not exist"
-    echo "Checking public/build/.vite/ directory:"
-    ls -la public/build/.vite/ 2>/dev/null || echo "public/build/.vite/ does not exist"
+    echo "✗ Manifest missing!"
+    ls -la public/build/
     exit 1
 fi
 

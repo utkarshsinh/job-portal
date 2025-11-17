@@ -10,8 +10,7 @@ cmds = [
 [phases.build]
 cmds = [
   "npm run build",
-  "mkdir -p public/build",
-  "cp public/build/.vite/manifest.json public/build/manifest.json || true"
+  "mkdir -p public/build"
 ]
 
 [start]
