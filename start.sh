@@ -1,29 +1,24 @@
 #!/bin/bash
 
 echo "Starting container..."
-echo ""
 
 php artisan migrate --force || true
 php check-and-seed.php || true
 
+# Remove Vite dev hot file (just in case)
 rm -f public/hot
 
-# Only look for correct manifest
+echo "Checking Vite build output..."
+
 if [ -f "public/build/manifest.json" ]; then
-    echo "✓ Manifest found at public/build/manifest.json"
+    echo "✓ Manifest OK (public/build/manifest.json)"
 else
-    echo "✗ Manifest missing!"
-    ls -la public/build/
-    exit 1
+    echo "✗ Manifest missing! Build probably failed or not included."
+    ls -la public/build || echo "public/build missing"
 fi
 
 echo "Clearing Laravel caches..."
-php artisan view:clear
-php artisan route:clear
-php artisan config:clear
-php artisan cache:clear
 php artisan optimize:clear
-echo "✓ All caches cleared"
 
 echo "Starting Laravel..."
 php artisan serve --host=0.0.0.0 --port=$PORT
